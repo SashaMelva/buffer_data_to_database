@@ -2,20 +2,20 @@ package app
 
 import (
 	"github.com/SashaMelva/buffer_data_to_database/internal/config"
-	storage "github.com/SashaMelva/buffer_data_to_database/internal/memory/storage/postgre"
+	"github.com/SashaMelva/buffer_data_to_database/pkg/buffer"
 	"go.uber.org/zap"
 )
 
 type App struct {
-	storage *storage.Storage
-	log     *zap.SugaredLogger
-	Tokens  *config.Tokens
+	log    *zap.SugaredLogger
+	buf    *buffer.Buffer
+	Tokens *config.Tokens
 }
 
-func New(logger *zap.SugaredLogger, storage *storage.Storage, config *config.Tokens) *App {
+func New(logger *zap.SugaredLogger, config *config.Tokens, buf *buffer.Buffer) *App {
 	return &App{
-		storage: storage,
-		log:     logger,
-		Tokens:  config,
+		log:    logger,
+		buf:    buf,
+		Tokens: config,
 	}
 }

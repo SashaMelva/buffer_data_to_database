@@ -7,20 +7,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (s *Service) AddFacts(ctx *gin.Context) {
-	var facts entity.Fact
+func (s *Service) AddFactsArray(ctx *gin.Context) {
+	var facts entity.Facts
 	if err := ctx.ShouldBindJSON(&facts); err != nil {
 		ctx.String(http.StatusBadRequest, err.Error())
 		return
 	}
 	s.log.Debug(facts)
 
-	id, err := s.app.CreateFact(&facts)
+	err := s.app.CreateFacts(&facts)
 
 	if err != nil {
 		ctx.String(http.StatusNotFound, err.Error())
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"Id": id})
+	ctx.Status(http.StatusOK)
 }

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -13,7 +12,6 @@ import (
 	"github.com/SashaMelva/buffer_data_to_database/internal/app"
 	"github.com/SashaMelva/buffer_data_to_database/internal/config"
 	"github.com/SashaMelva/buffer_data_to_database/internal/handler/httphandler"
-	"github.com/SashaMelva/buffer_data_to_database/pkg"
 )
 
 type Server struct {
@@ -30,7 +28,7 @@ func NewServer(log *zap.SugaredLogger, app *app.App, config *config.ConfigHttpSe
 		fmt.Println("Hellow world)")
 	})
 
-	router.POST("/add_new_facts", handler.AddFacts)
+	router.POST("/add_new_facts_array", handler.AddFactsArray)
 
 	return &Server{
 		srv: &http.Server{
@@ -57,31 +55,6 @@ func (s *Server) Stop(ctx context.Context) {
 
 func AuthMiddleware(log *zap.SugaredLogger) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		token := c.GetHeader("Authorization")
-		log.Debug(token)
-
-		if token == "" {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is required"})
-			return
-		}
-
-		sub, err := pkg.ParseAccessToken(token, "secretJWT")
-
-		log.Debug(sub)
-		if err != nil {
-			log.Error(err)
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
-			return
-		}
-		intAcc, err := strconv.Atoi(sub)
-
-		if err != nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
-			log.Error(err)
-			return
-		}
-
-		c.Set("accountId", intAcc)
 		c.Next()
 	}
 }
