@@ -24,7 +24,12 @@ func init() {
 	flag.StringVar(&configFile, "config", "../configs/", "Path to configuration file")
 }
 
-// var embedMigrations embed.FS
+// @title Buffer
+// @version 1.0
+// @description API Buffer for DB
+
+// @host localhost:8080
+// @BasePath /
 
 func main() {
 

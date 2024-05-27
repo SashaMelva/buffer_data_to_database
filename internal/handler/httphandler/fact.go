@@ -7,6 +7,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Add Facts
+// @Tags facts
+// @Description add facts for buffer
+// @ID add-facts
+// @Accept  json
+// @Produce  json
+// @Param input body entity.Facts true "facts info"
+// @Success 200
+// @Failure 400,404
+// @Failure 500
+// @Failure default
+// @Router /add_new_facts_array [post]
 func (s *Service) AddFactsArray(ctx *gin.Context) {
 	var facts entity.Facts
 	if err := ctx.ShouldBindJSON(&facts); err != nil {

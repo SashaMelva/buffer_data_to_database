@@ -7,8 +7,11 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.uber.org/zap"
 
+	_ "github.com/SashaMelva/buffer_data_to_database/docs"
 	"github.com/SashaMelva/buffer_data_to_database/internal/app"
 	"github.com/SashaMelva/buffer_data_to_database/internal/config"
 	"github.com/SashaMelva/buffer_data_to_database/internal/handler/httphandler"
@@ -27,6 +30,7 @@ func NewServer(log *zap.SugaredLogger, app *app.App, config *config.ConfigHttpSe
 	router.GET("/", func(ctx *gin.Context) {
 		fmt.Println("Hellow world)")
 	})
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.POST("/add_new_facts_array", handler.AddFactsArray)
 

@@ -1,0 +1,65 @@
+basePath: /
+definitions:
+  entity.Fact:
+    properties:
+      comment:
+        description: |-
+          PeriodKey           string    `json:"period_key"`
+          IndicatorToMoId     int       `json:"indicator_to_mo_id"`
+          IndicatorToMoFactId int       `json:"indicator_to_mo_fact_id"`
+          Value               int       `json:"value"`
+          FactTime            time.Time `json:"fact_time"`
+          IsPlan              int       `json:"is_plan"`
+          AuthUserId          int       `json:"auth_user_id"`
+        type: string
+      period_end:
+        type: string
+      period_start:
+        type: string
+    type: object
+  entity.Facts:
+    properties:
+      facts:
+        items:
+          $ref: '#/definitions/entity.Fact'
+        type: array
+      limit:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Buffer for DB
+  title: Buffer
+  version: "1.0"
+paths:
+  /add_new_facts_array:
+    post:
+      consumes:
+      - application/json
+      description: add facts for buffer
+      operationId: add-facts
+      parameters:
+      - description: facts info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Facts'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+        default:
+          description: ""
+      summary: Add Facts
+      tags:
+      - facts
+swagger: "2.0"

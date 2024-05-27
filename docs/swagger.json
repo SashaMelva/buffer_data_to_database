@@ -1,0 +1,88 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API Buffer for DB",
+        "title": "Buffer",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/add_new_facts_array": {
+            "post": {
+                "description": "add facts for buffer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "facts"
+                ],
+                "summary": "Add Facts",
+                "operationId": "add-facts",
+                "parameters": [
+                    {
+                        "description": "facts info",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.Facts"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "default": {
+                        "description": ""
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "entity.Fact": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "description": "PeriodKey           string    `json:\"period_key\"`\nIndicatorToMoId     int       `json:\"indicator_to_mo_id\"`\nIndicatorToMoFactId int       `json:\"indicator_to_mo_fact_id\"`\nValue               int       `json:\"value\"`\nFactTime            time.Time `json:\"fact_time\"`\nIsPlan              int       `json:\"is_plan\"`\nAuthUserId          int       `json:\"auth_user_id\"`",
+                    "type": "string"
+                },
+                "period_end": {
+                    "type": "string"
+                },
+                "period_start": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.Facts": {
+            "type": "object",
+            "properties": {
+                "facts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Fact"
+                    }
+                },
+                "limit": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}
