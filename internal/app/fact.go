@@ -11,3 +11,8 @@ func (a *App) CreateFacts(facts *entity.Facts) error {
 
 	return nil
 }
+
+func (a *App) SaveFact(fact *entity.Fact) (bool, error) {
+
+	return true, nil
+}

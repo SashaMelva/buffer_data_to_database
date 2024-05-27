@@ -9,6 +9,7 @@ import (
 
 	"github.com/SashaMelva/buffer_data_to_database/internal/app"
 	"github.com/SashaMelva/buffer_data_to_database/internal/config"
+	"github.com/SashaMelva/buffer_data_to_database/internal/entity"
 	"github.com/SashaMelva/buffer_data_to_database/internal/logger"
 	"github.com/SashaMelva/buffer_data_to_database/internal/memory/connection"
 	storage "github.com/SashaMelva/buffer_data_to_database/internal/memory/storage/postgre"
@@ -39,11 +40,6 @@ func main() {
 		syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
 	defer cancel()
 
-	// go func() {
-	// 	fact := <-buffer.Buf
-	// 	log.Debug("get ", fact)
-	// }()
-
 	go func() {
 		<-ctx.Done()
 
@@ -52,7 +48,25 @@ func main() {
 
 		httpServer.Stop(ctx)
 	}()
+	go func() {
+		log.Debug("Start listen")
+		var fact *entity.Fact
+		for {
+			fact = buffer.Read()
+			ok, err := app.SaveFact(fact)
 
+			if err != nil {
+				log.Debug(err)
+				break
+			}
+
+			if !ok {
+				buffer.Add(fact)
+			} else {
+				log.Debug("Fact Saving :", fact)
+			}
+		}
+	}()
 	log.Debug("Services is running...")
 	httpServer.Start(ctx)
 }

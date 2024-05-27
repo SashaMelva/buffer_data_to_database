@@ -25,3 +25,9 @@ func (b *Buffer) Read() *entity.Fact {
 	fact := <-b.Buf
 	return fact
 }
+
+func (b *Buffer) Reader() *entity.Fact {
+	b.Len -= 1
+	fact := <-b.Buf
+	return fact
+}
