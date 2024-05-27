@@ -13,6 +13,11 @@ func (a *App) CreateFacts(facts *entity.Facts) error {
 }
 
 func (a *App) SaveFact(fact *entity.Fact) (bool, error) {
+	err := a.Storage.AddFact(fact)
+
+	if err != nil {
+		return false, err
+	}
 
 	return true, nil
 }

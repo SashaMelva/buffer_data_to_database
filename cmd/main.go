@@ -15,6 +15,7 @@ import (
 	storage "github.com/SashaMelva/buffer_data_to_database/internal/memory/storage/postgre"
 	"github.com/SashaMelva/buffer_data_to_database/internal/server/http"
 	"github.com/SashaMelva/buffer_data_to_database/pkg/buffer"
+	goose "github.com/pressly/goose/v3"
 )
 
 var configFile string
@@ -23,6 +24,8 @@ func init() {
 	flag.StringVar(&configFile, "config", "../configs/", "Path to configuration file")
 }
 
+// var embedMigrations embed.FS
+
 func main() {
 
 	config := config.New(configFile)
@@ -30,6 +33,14 @@ func main() {
 
 	buffer := buffer.New()
 	connectionDB := connection.New(config.DataBase, log)
+
+	if err := goose.SetDialect("postgres"); err != nil {
+		panic(err)
+	}
+
+	if err := goose.Up(connectionDB.StorageDb, "migrations"); err != nil {
+		panic(err)
+	}
 
 	memstorage := storage.New(connectionDB.StorageDb, log)
 	app := app.New(log, config.Tokens, buffer, memstorage)
