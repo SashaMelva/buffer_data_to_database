@@ -32,7 +32,7 @@ func NewServer(log *zap.SugaredLogger, app *app.App, config *config.ConfigHttpSe
 
 	return &Server{
 		srv: &http.Server{
-			Addr:    config.Host + ":" + config.Port,
+			Addr:    ":" + config.Port,
 			Handler: router,
 		},
 		log: log,
@@ -51,10 +51,4 @@ func (s *Server) Stop(ctx context.Context) {
 	}
 
 	os.Exit(1)
-}
-
-func AuthMiddleware(log *zap.SugaredLogger) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Next()
-	}
 }
